@@ -1,0 +1,12 @@
+node_modules
+build
+dist
+
+*.log
+
+.env
+.env.local
+.env.production
+
+yarn.lock
+package-lock.json
