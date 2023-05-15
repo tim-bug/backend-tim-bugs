@@ -6,3 +6,136 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  uuid          String        @id @default(uuid())
+  fullname      String        @db.VarChar(80)
+  username      String        @unique @db.VarChar(50)
+  email         String        @unique @db.VarChar(50)
+  password      String
+  point         Int           @default(0)
+  phone         String?       @unique @db.VarChar(16)
+  avatar        String?
+  gender        Gender
+  division_id   Int           @unique
+  division      Division      @relation(fields: [division_id], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  comment       Comment[]
+  assigned_task Detail_Task[]
+  is_deleted    Boolean       @default(false)
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
+  deleted_at    DateTime?
+}
+
+model Lead {
+  uuid       String    @id @default(uuid())
+  username   String    @unique @db.VarChar(80)
+  email      String    @unique @db.VarChar(50)
+  password   String
+  avatar     String?
+  is_deleted Boolean   @default(false)
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+  Board      Board[]
+}
+
+model Division {
+  id         Int       @id @default(autoincrement())
+  name       String    @unique @db.VarChar(50)
+  level      String    @db.VarChar(50)
+  user       User?
+  is_deleted Boolean   @default(false)
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+}
+
+model Category {
+  id         Int       @id @default(autoincrement())
+  name       String    @unique @db.VarChar(50)
+  task       Task?
+  is_deleted Boolean   @default(false)
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+}
+
+model Task {
+  uuid               String        @id @default(uuid())
+  name               String        @unique @db.VarChar(80)
+  status             TaskStatus    @default(normal)
+  description        String?
+  deadline           DateTime?
+  assigned_at        DateTime?
+  category_id        Int           @unique
+  Category           Category      @relation(fields: [category_id], references: [id], onUpdate: Restrict, onDelete: Restrict)
+  point_availability Int           @default(0)
+  countdown          Int?          @default(0)
+  comment            Comment[]
+  assigned_user      Detail_Task[]
+  is_event           Boolean       @default(false)
+  is_archive         Boolean       @default(false)
+  is_done            Boolean       @default(false)
+  created_at         DateTime      @default(now())
+  updated_at         DateTime      @updatedAt
+  archived_at        DateTime?
+}
+
+model Detail_Task {
+  id             Int       @id @default(autoincrement())
+  task_id        String
+  user_id        String
+  board_id       Int
+  Task           Task      @relation(fields: [task_id], references: [uuid], onUpdate: Restrict, onDelete: Restrict)
+  User           User      @relation(fields: [user_id], references: [uuid], onUpdate: Restrict, onDelete: Restrict)
+  total_point    Int       @default(0)
+  deadline_point Int       @default(0)
+  Board          Board     @relation(fields: [board_id], references: [id], onUpdate: Restrict, onDelete: Restrict)
+  is_deleted     Boolean   @default(false)
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+  deleted_at     DateTime?
+}
+
+model Comment {
+  id         Int       @id @default(autoincrement())
+  content    String
+  task_id    String
+  user_id    String
+  Task       Task      @relation(fields: [task_id], references: [uuid], onUpdate: Restrict, onDelete: Restrict)
+  User       User      @relation(fields: [user_id], references: [uuid], onUpdate: Restrict, onDelete: Restrict)
+  is_deleted Boolean   @default(false)
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+}
+
+model Board {
+  id         Int           @id @default(autoincrement())
+  name       String        @unique @db.VarChar(80)
+  lead_id    String
+  Lead       Lead          @relation(fields: [lead_id], references: [uuid], onUpdate: Restrict, onDelete: Restrict)
+  tasks      Detail_Task[]
+  is_deleted Boolean       @default(false)
+  created_at DateTime      @default(now())
+  updated_at DateTime      @updatedAt
+  deleted_at DateTime?
+}
+
+enum Gender {
+  male
+  female
+}
+
+enum AccountStatus {
+  active
+  inactive
+  suspended
+}
+
+enum TaskStatus {
+  priority
+  normal
+  low
+}
