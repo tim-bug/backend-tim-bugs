@@ -1,6 +1,7 @@
 import type { Division } from '@prisma/client';
 import type { SoftDeletePayload } from '../types';
-import { db } from '../utils/db';
+
+import { db } from '../configs/db';
 
 export const addDivision = async (payload: Division): Promise<Division> => {
   const res = await db.division.create({
@@ -10,7 +11,7 @@ export const addDivision = async (payload: Division): Promise<Division> => {
   return res;
 };
 
-export const getAllDivsions = async (limit: number): Promise<Division[]> => {
+export const getAllDivisions = async (limit: number): Promise<Division[]> => {
   const res = await db.division.findMany({
     take: limit,
   });
@@ -18,23 +19,23 @@ export const getAllDivsions = async (limit: number): Promise<Division[]> => {
   return res;
 };
 
-export const getDivsionById = async (id: string): Promise<Division | null> => {
+export const getDivisionById = async (id: string): Promise<Division | null> => {
   const res = await db.division.findUnique({
     where: {
-      id: parseInt(id),
+      id: Number(id),
     },
   });
 
   return res;
 };
 
-export const updateDivsionById = async (
+export const updateDivisionById = async (
   id: string,
   payload: Division,
 ): Promise<Division | null> => {
   const res = await db.division.update({
     where: {
-      id: parseInt(id),
+      id: Number(id),
     },
     data: payload,
   });
@@ -45,7 +46,7 @@ export const updateDivsionById = async (
 export const softDeleteDivisionById = async (id: string, payload: SoftDeletePayload) => {
   const res = await db.division.update({
     where: {
-      id: parseInt(id),
+      id: Number(id),
     },
     data: {
       is_deleted: payload.is_deleted,
@@ -56,10 +57,10 @@ export const softDeleteDivisionById = async (id: string, payload: SoftDeletePayl
   return res;
 };
 
-export const findExistingDivisionService = async (Division: string): Promise<Division | null> => {
+export const findExistingDivision = async (name: string): Promise<Division | null> => {
   const res = await db.division.findUnique({
     where: {
-      name: Division,
+      name,
     },
   });
 

@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import { Router } from 'express';
 
-import DivisionRoutes from './divisionRoutes';
+import DivisionRoutes from './division.routes';
 
 const router = Router();
 

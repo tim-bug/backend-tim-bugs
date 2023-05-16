@@ -1,6 +1,6 @@
 import type { Division } from '@prisma/client';
 
-import { db } from '../utils/db';
+import { db } from '../configs/db';
 
 type DivisionWithoutId = Omit<Division, 'id'>;
 
@@ -10,28 +10,28 @@ const stuctApplication: DivisionWithoutId[] = [
     is_deleted: false,
     created_at: new Date(),
     updated_at: new Date(),
-    deleted_at: new Date(),
+    deleted_at: null,
   },
   {
     name: 'Accountant',
     is_deleted: false,
     created_at: new Date(),
     updated_at: new Date(),
-    deleted_at: new Date(),
+    deleted_at: null,
   },
   {
     name: 'HR',
     is_deleted: false,
     created_at: new Date(),
     updated_at: new Date(),
-    deleted_at: new Date(),
+    deleted_at: null,
   },
   {
     name: 'Marketing',
     is_deleted: false,
     created_at: new Date(),
     updated_at: new Date(),
-    deleted_at: new Date(),
+    deleted_at: null,
   },
 ];
 
