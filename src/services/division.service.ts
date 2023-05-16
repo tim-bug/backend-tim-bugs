@@ -66,3 +66,17 @@ export const findExistingDivision = async (name: string): Promise<Division | nul
 
   return res;
 };
+
+export const recoveryDivisionById = async (id: string) => {
+  const res = await db.user_Level.update({
+    where: {
+      id: Number(id),
+    },
+    data: {
+      is_deleted: false,
+      deleted_at: null,
+    },
+  });
+
+  return res;
+};

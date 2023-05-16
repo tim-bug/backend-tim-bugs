@@ -5,6 +5,7 @@ import {
   getAllDivisions,
   updateDivisionById,
   findExistingDivision,
+  recoveryDivisionById,
   softDeleteDivisionById,
 } from '../services/division.service';
 
@@ -165,6 +166,32 @@ export default class Division {
         time: new Date().getTime(),
       });
     } catch (error) {
+      return next(error);
+    }
+  }
+
+  static async recoveryDivisionById(req: Request, res: Response, next: NextFunction) {
+    const { id } = req.params
+
+    try {
+      const result = await recoveryDivisionById(id)
+
+      if (!result) {
+        return res.status(404).json({
+          status: 'not found',
+          code: 404,
+          message: 'Oops! Division not found',
+          time: new Date().getTime(),
+        });
+      }
+
+      return res.status(200).json({
+        status: 'success',
+        code: 200,
+        message: 'Division successfully recovered',
+        time: new Date().getTime(),
+      });
+    } catch(error){
       return next(error);
     }
   }
