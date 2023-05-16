@@ -1,6 +1,8 @@
 import type { Request, Response } from 'express';
 import { Router } from 'express';
 
+import DivisionRoutes from './divisionRoutes';
+
 const router = Router();
 
 router.get('/', (req: Request, res: Response) => {
@@ -10,5 +12,7 @@ router.get('/', (req: Request, res: Response) => {
     time: new Date().getTime(),
   });
 });
+
+router.use(DivisionRoutes);
 
 export default router;
