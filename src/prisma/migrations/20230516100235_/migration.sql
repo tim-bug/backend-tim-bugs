@@ -10,6 +10,7 @@ CREATE TABLE `User` (
     `avatar` VARCHAR(191) NULL,
     `gender` ENUM('male', 'female') NOT NULL,
     `division_id` INTEGER NOT NULL,
+    `level_id` INTEGER NOT NULL,
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
@@ -19,6 +20,7 @@ CREATE TABLE `User` (
     UNIQUE INDEX `User_email_key`(`email`),
     UNIQUE INDEX `User_phone_key`(`phone`),
     UNIQUE INDEX `User_division_id_key`(`division_id`),
+    UNIQUE INDEX `User_level_id_key`(`level_id`),
     PRIMARY KEY (`uuid`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -43,13 +45,25 @@ CREATE TABLE `Lead` (
 CREATE TABLE `Division` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(50) NOT NULL,
-    `level` VARCHAR(50) NOT NULL,
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
     `deleted_at` DATETIME(3) NULL,
 
     UNIQUE INDEX `Division_name_key`(`name`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `User_Level` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `level` VARCHAR(50) NOT NULL,
+    `is_deleted` BOOLEAN NOT NULL DEFAULT false,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NOT NULL,
+    `deleted_at` DATETIME(3) NULL,
+
+    UNIQUE INDEX `User_Level_level_key`(`level`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -135,6 +149,9 @@ CREATE TABLE `Board` (
 
 -- AddForeignKey
 ALTER TABLE `User` ADD CONSTRAINT `User_division_id_fkey` FOREIGN KEY (`division_id`) REFERENCES `Division`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+-- AddForeignKey
+ALTER TABLE `User` ADD CONSTRAINT `User_level_id_fkey` FOREIGN KEY (`level_id`) REFERENCES `User_Level`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 -- AddForeignKey
 ALTER TABLE `Task` ADD CONSTRAINT `Task_category_id_fkey` FOREIGN KEY (`category_id`) REFERENCES `Category`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
