@@ -25,19 +25,21 @@ CREATE TABLE `User` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Lead` (
+CREATE TABLE `Admin` (
     `uuid` VARCHAR(191) NOT NULL,
     `username` VARCHAR(80) NOT NULL,
     `email` VARCHAR(50) NOT NULL,
     `password` VARCHAR(191) NOT NULL,
     `avatar` VARCHAR(191) NULL,
+    `level_id` INTEGER NOT NULL,
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
     `deleted_at` DATETIME(3) NULL,
 
-    UNIQUE INDEX `Lead_username_key`(`username`),
-    UNIQUE INDEX `Lead_email_key`(`email`),
+    UNIQUE INDEX `Admin_username_key`(`username`),
+    UNIQUE INDEX `Admin_email_key`(`email`),
+    UNIQUE INDEX `Admin_level_id_key`(`level_id`),
     PRIMARY KEY (`uuid`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -137,7 +139,7 @@ CREATE TABLE `Comment` (
 CREATE TABLE `Board` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(80) NOT NULL,
-    `lead_id` VARCHAR(191) NOT NULL,
+    `admin_id` VARCHAR(191) NOT NULL,
     `is_deleted` BOOLEAN NOT NULL DEFAULT false,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
@@ -152,6 +154,9 @@ ALTER TABLE `User` ADD CONSTRAINT `User_division_id_fkey` FOREIGN KEY (`division
 
 -- AddForeignKey
 ALTER TABLE `User` ADD CONSTRAINT `User_level_id_fkey` FOREIGN KEY (`level_id`) REFERENCES `User_Level`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+-- AddForeignKey
+ALTER TABLE `Admin` ADD CONSTRAINT `Admin_level_id_fkey` FOREIGN KEY (`level_id`) REFERENCES `User_Level`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 -- AddForeignKey
 ALTER TABLE `Task` ADD CONSTRAINT `Task_category_id_fkey` FOREIGN KEY (`category_id`) REFERENCES `Category`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
@@ -172,4 +177,4 @@ ALTER TABLE `Comment` ADD CONSTRAINT `Comment_task_id_fkey` FOREIGN KEY (`task_i
 ALTER TABLE `Comment` ADD CONSTRAINT `Comment_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`uuid`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 -- AddForeignKey
-ALTER TABLE `Board` ADD CONSTRAINT `Board_lead_id_fkey` FOREIGN KEY (`lead_id`) REFERENCES `Lead`(`uuid`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `Board` ADD CONSTRAINT `Board_admin_id_fkey` FOREIGN KEY (`admin_id`) REFERENCES `Admin`(`uuid`) ON DELETE RESTRICT ON UPDATE RESTRICT;

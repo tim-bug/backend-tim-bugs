@@ -1,43 +1,16 @@
-import type { Division } from '@prisma/client';
+import { db } from '../configs/db';
 
-import { db } from '../utils/db';
-
-type DivisionWithoutId = Omit<Division, 'id'>;
-
-const stuctApplication: DivisionWithoutId[] = [
-  {
-    name: 'IT',
-    is_deleted: false,
-    created_at: new Date(),
-    updated_at: new Date(),
-    deleted_at: new Date(),
-  },
-  {
-    name: 'Accountant',
-    is_deleted: false,
-    created_at: new Date(),
-    updated_at: new Date(),
-    deleted_at: new Date(),
-  },
-  {
-    name: 'HR',
-    is_deleted: false,
-    created_at: new Date(),
-    updated_at: new Date(),
-    deleted_at: new Date(),
-  },
-  {
-    name: 'Marketing',
-    is_deleted: false,
-    created_at: new Date(),
-    updated_at: new Date(),
-    deleted_at: new Date(),
-  },
-];
+import { stuctDivision, structUserLevel } from '../configs/seedValue';
 
 async function main() {
-  stuctApplication.forEach(async (app) => {
+  stuctDivision.forEach(async (app) => {
     await db.division.create({
+      data: app,
+    });
+  });
+
+  structUserLevel.forEach(async (app) => {
+    await db.user_Level.create({
       data: app,
     });
   });

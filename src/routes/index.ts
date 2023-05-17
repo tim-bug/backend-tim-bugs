@@ -1,7 +1,9 @@
 import type { Request, Response } from 'express';
+
 import { Router } from 'express';
 
-import DivisionRoutes from './divisionRoutes';
+import DivisionRoutes from './division.routes';
+import UserLevelRoutes from './userLevel.routes';
 
 const router = Router();
 
@@ -14,5 +16,6 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 router.use(DivisionRoutes);
+router.use(UserLevelRoutes);
 
 export default router;

@@ -29,15 +29,17 @@ model User {
   deleted_at    DateTime?
 }
 
-model Lead {
-  uuid       String    @id @default(uuid())
-  username   String    @unique @db.VarChar(80)
-  email      String    @unique @db.VarChar(50)
+model Admin {
+  uuid       String     @id @default(uuid())
+  username   String     @unique @db.VarChar(80)
+  email      String     @unique @db.VarChar(50)
   password   String
   avatar     String?
-  is_deleted Boolean   @default(false)
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
+  level_id   Int        @unique
+  level      User_Level @relation(fields: [level_id], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  is_deleted Boolean    @default(false)
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
   deleted_at DateTime?
   Board      Board[]
 }
@@ -56,6 +58,7 @@ model User_Level {
   id         Int       @id @default(autoincrement())
   level      String    @unique @db.VarChar(50)
   user       User?
+  admin      Admin?
   is_deleted Boolean   @default(false)
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
@@ -125,8 +128,8 @@ model Comment {
 model Board {
   id         Int           @id @default(autoincrement())
   name       String        @unique @db.VarChar(80)
-  lead_id    String
-  Lead       Lead          @relation(fields: [lead_id], references: [uuid], onUpdate: Restrict, onDelete: Restrict)
+  admin_id   String
+  Admin      Admin         @relation(fields: [admin_id], references: [uuid], onUpdate: Restrict, onDelete: Restrict)
   tasks      Detail_Task[]
   is_deleted Boolean       @default(false)
   created_at DateTime      @default(now())
